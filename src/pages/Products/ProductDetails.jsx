@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Container, Typography, Grid, Box, Button, Rating } from '@mui/material';
+import { Container, Typography, Grid, Box, Button, Rating, TextField } from '@mui/material';
 import { useNavigate, useParams } from 'react-router';
 import axios from 'axios';
 import { AuthContext } from 'src/contexts/auth/AuthContext';
@@ -11,6 +11,8 @@ const ServiceDetail = () => {
   const { token, isLoggedIn } = useContext(AuthContext);
   const [currentUser, setCurrentUser] = useState(null);
   const [service, setService] = useState(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleOpen = () => setIsDialogOpen(true);
@@ -26,7 +28,7 @@ const ServiceDetail = () => {
       const data = response.data.EncryptedResponse;
       setCurrentUser(data.data.user);
     } catch (error) {
-      console.error('Error fetching services:', error);
+      console.error('Error fetching user:', error);
     }
   };
 
@@ -40,7 +42,27 @@ const ServiceDetail = () => {
       const data = response.data.EncryptedResponse;
       setService(data.data.service);
     } catch (error) {
-      console.error('Error fetching services:', error);
+      console.error('Error fetching service:', error);
+    }
+  };
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(
+        `http://localhost:8080/api/v1/services/review/${id}`,
+        { user: currentUser, rating, comment },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setRating(5);
+      setComment('');
+      handleGetService();
+    } catch (error) {
+      console.error('Error submitting review:', error);
     }
   };
 
@@ -53,6 +75,7 @@ const ServiceDetail = () => {
       handleGetUser(service?.provider);
     }
   }, [service]);
+
   return (
     <Container sx={{ pt: 10, pb: 8 }}>
       <Grid
@@ -91,7 +114,7 @@ const ServiceDetail = () => {
             {service?.category} by {currentUser?.firstName}
           </Typography>
           <Rating
-            value={service?.rating ?? 0}
+            value={service?.averageRating ?? 0}
             precision={0.5}
             readOnly
           />
@@ -136,6 +159,76 @@ const ServiceDetail = () => {
           </Button>
         </Grid>
       </Grid>
+
+      {/* Review Section */}
+      <Box sx={{ mt: 6 }}>
+        <Typography variant="h5">Reviews</Typography>
+
+        {/* Existing Reviews */}
+        {service?.reviews.length > 0 ? (
+          service?.reviews.map((review) => (
+            <Box
+              key={review._id}
+              sx={{ mt: 2 }}
+            >
+              <Typography variant="subtitle2">
+                {`${review.user.firstName} ${review.user.lastName}`}
+              </Typography>
+              <Rating
+                value={review.rating}
+                readOnly
+                precision={0.5}
+              />
+              <Typography
+                variant="body2"
+                color="text.secondary"
+              >
+                {review.comment}
+              </Typography>
+            </Box>
+          ))
+        ) : (
+          <Typography
+            variant="body2"
+            color="text.secondary"
+          >
+            No reviews yet.
+          </Typography>
+        )}
+
+        {/* Review Form */}
+        <Box
+          component="form"
+          onSubmit={handleSubmitReview}
+          sx={{ mt: 4 }}
+        >
+          <Typography variant="h6">Add a Review</Typography>
+          <Rating
+            value={rating}
+            onChange={(event, newValue) => setRating(newValue)}
+            precision={0.5}
+            sx={{ mt: 1 }}
+          />
+          <TextField
+            label="Comment"
+            multiline
+            rows={3}
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            fullWidth
+            sx={{ mt: 2 }}
+            required
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ mt: 2 }}
+          >
+            Submit Review
+          </Button>
+        </Box>
+      </Box>
+
       <SubscriptionOrderModal
         open={isDialogOpen}
         handleClose={handleClose}
