@@ -89,7 +89,7 @@ const ServiceDetail = () => {
         >
           <Box
             component="img"
-            src={'https://via.placeholder.com/140'}
+            src={service?.image}
             alt={service?.name}
             sx={{ width: '100%', height: 'auto', borderRadius: 2 }}
           />

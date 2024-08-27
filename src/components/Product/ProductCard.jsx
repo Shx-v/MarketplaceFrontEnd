@@ -35,7 +35,7 @@ const ProductCard = ({ service }) => {
       <CardMedia
         component="img"
         height="140"
-        image={'https://via.placeholder.com/140'}
+        image={service.image}
         alt={'service.name'}
       />
       <CardContent>

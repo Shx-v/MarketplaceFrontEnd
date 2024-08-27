@@ -1,8 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Box, Typography, TextField, Button, Avatar, Grid, Link } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import axios from 'axios';
 
-export default function ForgotPasswordPage() {
+const ForgotPasswordPage = () => {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const handleChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const response = await axios.post('http://localhost:8080/api/v1/auth/forgot-password', {
+        email,
+      },);
+
+      setSuccess('Password reset instructions have been sent to your email.');
+      setEmail('');
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Container
       component="main"
@@ -36,6 +66,7 @@ export default function ForgotPasswordPage() {
           component="form"
           noValidate
           sx={{ mt: 1 }}
+          onSubmit={handleSubmit}
         >
           <TextField
             margin="normal"
@@ -46,14 +77,35 @@ export default function ForgotPasswordPage() {
             name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={handleChange}
           />
+          {error && (
+            <Typography
+              color="error"
+              variant="body2"
+              align="center"
+            >
+              {error}
+            </Typography>
+          )}
+          {success && (
+            <Typography
+              color="success"
+              variant="body2"
+              align="center"
+            >
+              {success}
+            </Typography>
+          )}
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={loading}
           >
-            Send Reset Link
+            {loading ? 'Sending...' : 'Send Reset Link'}
           </Button>
           <Grid container>
             <Grid
@@ -61,7 +113,7 @@ export default function ForgotPasswordPage() {
               xs
             >
               <Link
-                href="#"
+                href="/auth/login"
                 variant="body2"
               >
                 Remember your password? Sign in
@@ -72,4 +124,6 @@ export default function ForgotPasswordPage() {
       </Box>
     </Container>
   );
-}
+};
+
+export default ForgotPasswordPage;
