@@ -74,7 +74,7 @@ const ProductCard = ({ service }) => {
           Category: {service.category}
         </Typography>
         <Rating
-          value={4.5}
+          value={service.averageRating}
           precision={0.5}
           readOnly
           sx={{ mt: 1 }}
