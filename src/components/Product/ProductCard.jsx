@@ -36,7 +36,7 @@ const ProductCard = ({ service }) => {
         component="img"
         height="140"
         image={service.image}
-        alt={'service.name'}
+        alt={service.name}
       />
       <CardContent>
         <Typography

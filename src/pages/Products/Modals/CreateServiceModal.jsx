@@ -10,9 +10,12 @@ import {
   DialogContent,
   DialogActions,
   InputAdornment,
+  IconButton,
 } from '@mui/material';
 import axios from 'axios';
 import RupeeIcon from '@mui/icons-material/CurrencyRupee';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { AuthContext } from 'src/contexts/auth/AuthContext';
 
 const CreateServiceModal = ({ open, onClose }) => {
@@ -21,8 +24,20 @@ const CreateServiceModal = ({ open, onClose }) => {
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
   const [features, setFeatures] = useState('');
+  const [image, setImage] = useState(null);
   const { user, token } = useContext(AuthContext);
   const [currentUser, setCurrentUser] = useState(null);
+
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImage(file);
+    }
+  };
+
+  const handleRemove = () => {
+    setImage(null);
+  };
 
   const handleGetUser = async () => {
     try {
@@ -38,6 +53,29 @@ const CreateServiceModal = ({ open, onClose }) => {
     }
   };
 
+  // const handleSubmit = async (e) => {
+  //   e?.preventDefault();
+
+  //   const serviceData = {
+  //     name,
+  //     provider: currentUser,
+  //     description,
+  //     category,
+  //     price: parseFloat(price),
+  //     features: features.split(',').map((f) => f.trim()),
+  //   };
+
+  //   try {
+  //     const response = await axios.post('http://localhost:8080/api/v1/services', serviceData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     console.error('Error creating service:', error);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e?.preventDefault();
 
@@ -50,8 +88,26 @@ const CreateServiceModal = ({ open, onClose }) => {
       features: features.split(',').map((f) => f.trim()),
     };
 
+    if (image) {
+      const data = new FormData();
+      const filename = `http://localhost:8080/uploads/` +image.name;
+      data.append('image', image);
+      serviceData.image = filename;
+      try {
+        const imgUpload = await axios.post(`http://localhost:8080/api/v1/upload`, data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        console.log(imgUpload);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/services', serviceData, {
+      const res = await axios.post('http://localhost:8080/api/v1/services', serviceData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -75,6 +131,7 @@ const CreateServiceModal = ({ open, onClose }) => {
         setCategory('');
         setPrice('');
         setFeatures('');
+        setImage(null);
       }}
       maxWidth="sm"
       fullWidth
@@ -148,6 +205,34 @@ const CreateServiceModal = ({ open, onClose }) => {
             value={features}
             onChange={(e) => setFeatures(e.target.value)}
           />
+
+          <Box sx={{ mt: 2 }}>
+            {image ? (
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography>{image?.name}</Typography>
+                <IconButton
+                  onClick={handleRemove}
+                  color="secondary"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            ) : (
+              <Button
+                variant="contained"
+                component="label"
+                startIcon={<CloudUploadIcon />}
+              >
+                Choose Image
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={handleFileSelect}
+                />
+              </Button>
+            )}
+          </Box>
         </Box>
       </DialogContent>
       <DialogActions>
@@ -159,6 +244,7 @@ const CreateServiceModal = ({ open, onClose }) => {
             setCategory('');
             setPrice('');
             setFeatures('');
+            setImage(null);
           }}
           color="primary"
         >
@@ -167,12 +253,13 @@ const CreateServiceModal = ({ open, onClose }) => {
         <Button
           onClick={() => {
             handleSubmit();
-            onClose();
-            setName('');
-            setDescription('');
-            setCategory('');
-            setPrice('');
-            setFeatures('');
+            // onClose();
+            // setName('');
+            // setDescription('');
+            // setCategory('');
+            // setPrice('');
+            // setFeatures('');
+            // setImage(null);
           }}
           variant="contained"
           color="primary"
