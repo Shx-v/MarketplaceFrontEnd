@@ -48,21 +48,25 @@ const ServiceDetail = () => {
 
   const handleSubmitReview = async (e) => {
     e.preventDefault();
-    try {
-      await axios.post(
-        `http://localhost:8080/api/v1/services/review/${id}`,
-        { user: currentUser, rating, comment },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setRating(5);
-      setComment('');
-      handleGetService();
-    } catch (error) {
-      console.error('Error submitting review:', error);
+    if (isLoggedIn) {
+      try {
+        await axios.post(
+          `http://localhost:8080/api/v1/services/review/${id}`,
+          { user: currentUser, rating, comment },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setRating(5);
+        setComment('');
+        handleGetService();
+      } catch (error) {
+        console.error('Error submitting review:', error);
+      }
+    } else {
+      navigate('/auth/login');
     }
   };
 
@@ -160,11 +164,9 @@ const ServiceDetail = () => {
         </Grid>
       </Grid>
 
-      {/* Review Section */}
       <Box sx={{ mt: 6 }}>
         <Typography variant="h5">Reviews</Typography>
 
-        {/* Existing Reviews */}
         {service?.reviews.length > 0 ? (
           service?.reviews.map((review) => (
             <Box
