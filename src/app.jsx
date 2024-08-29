@@ -5,22 +5,17 @@ import { ThemeProvider } from '@mui/material/styles';
 import AuthProvider from './contexts/auth/AuthContext';
 
 import 'src/global.css';
-// Remove if locales are not used
-import 'src/locales/i18n';
 
 import { RTL } from 'src/components/rtl';
 import { SettingsButton } from 'src/components/settings/settings-button';
 import { SettingsDrawer } from 'src/components/settings/settings-drawer';
 import { Toaster } from 'src/components/toaster';
 import { SettingsConsumer, SettingsProvider } from 'src/contexts/settings';
-import { gtmConfig } from 'src/config';
 import { useNprogress } from 'src/hooks/use-nprogress';
-import { useAnalytics } from 'src/hooks/use-analytics';
 import { routes } from 'src/routes';
 import { createTheme } from 'src/theme';
 
 export const App = () => {
-  useAnalytics(gtmConfig);
   useNprogress();
 
   const element = useRoutes(routes);
