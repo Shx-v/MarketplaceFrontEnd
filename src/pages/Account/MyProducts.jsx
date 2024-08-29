@@ -14,6 +14,7 @@ import {
   Button,
   Box,
   Stack,
+  TablePagination,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import EditIcon from '@mui/icons-material/Edit';
@@ -27,6 +28,17 @@ const MyServices = () => {
   const [services, setServices] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -141,29 +153,40 @@ const MyServices = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {services.map((service) => (
-                <TableRow key={service._id}>
-                  <TableCell>{service.name}</TableCell>
-                  <TableCell>{service.category}</TableCell>
-                  <TableCell>₹{service.price}</TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      aria-label="edit"
-                      onClick={() => handleEdit(service)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => handleDelete(service._id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {services
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((service) => (
+                  <TableRow key={service._id}>
+                    <TableCell>{service.name}</TableCell>
+                    <TableCell>{service.category}</TableCell>
+                    <TableCell>₹{service.price}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        aria-label="edit"
+                        onClick={() => handleEdit(service)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => handleDelete(service._id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
+          <TablePagination
+            component="div"
+            count={services.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
         </TableContainer>
       )}
 

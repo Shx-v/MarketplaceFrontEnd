@@ -14,6 +14,7 @@ import {
   Button,
   Box,
   Stack,
+  TablePagination,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -23,6 +24,17 @@ import { AuthContext } from 'src/contexts/auth/AuthContext';
 const MyServices = () => {
   const { user, token } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const handleGetOrders = async () => {
     if (user) {
@@ -41,7 +53,7 @@ const MyServices = () => {
   };
 
   const handleDeleteOrder = async (id) => {
-    if(user) {
+    if (user) {
       try {
         const response = await axios.delete(`http://localhost:8080/api/v1/orders/${id}`, {
           headers: {
@@ -53,7 +65,7 @@ const MyServices = () => {
         console.error('Error fetching services:', error);
       }
     }
-  }
+  };
 
   useEffect(() => {
     handleGetOrders();
@@ -119,7 +131,7 @@ const MyServices = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order) => (
+              {orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => (
                 <TableRow key={order._id}>
                   <TableCell>{order.service.name}</TableCell>
                   <TableCell>₹{order.amount}</TableCell>
@@ -137,6 +149,15 @@ const MyServices = () => {
               ))}
             </TableBody>
           </Table>
+          <TablePagination
+            component="div"
+            count={orders.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
         </TableContainer>
       )}
     </Container>

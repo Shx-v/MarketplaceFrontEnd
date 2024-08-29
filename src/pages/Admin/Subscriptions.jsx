@@ -12,6 +12,7 @@ import {
   TableCell,
   TableBody,
   Paper,
+  TablePagination,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import InfoIcon from '@mui/icons-material/Info';
@@ -21,6 +22,17 @@ import { AuthContext } from 'src/contexts/auth/AuthContext';
 const MySubscriptions = () => {
   const { token, user } = useContext(AuthContext);
   const [subscriptions, setSubscriptions] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -102,20 +114,31 @@ const MySubscriptions = () => {
                 <TableCell>Service</TableCell>
                 <TableCell>Start</TableCell>
                 <TableCell>End</TableCell>
-                <TableCell align='right'>Status</TableCell>
+                <TableCell align="right">Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {subscriptions.map((subscription) => (
-                <TableRow key={subscription._id}>
-                  <TableCell>{subscription.service.name}</TableCell>
-                  <TableCell>{formatDate(subscription.startDate)}</TableCell>
-                  <TableCell>{formatDate(subscription.endDate)}</TableCell>
-                  <TableCell align='right'>{subscription.status}</TableCell>
-                </TableRow>
-              ))}
+              {subscriptions
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((subscription) => (
+                  <TableRow key={subscription._id}>
+                    <TableCell>{subscription.service.name}</TableCell>
+                    <TableCell>{formatDate(subscription.startDate)}</TableCell>
+                    <TableCell>{formatDate(subscription.endDate)}</TableCell>
+                    <TableCell align="right">{subscription.status}</TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
+          <TablePagination
+            component="div"
+            count={subscriptions.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
         </TableContainer>
       )}
     </Container>

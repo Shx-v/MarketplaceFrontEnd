@@ -63,7 +63,7 @@ export const AccountPopover = (props) => {
       disableScrollLock
       onClose={onClose}
       open={open}
-      PaperProps={{ sx: { marginTop: 5, display: 'flex', flexDirection: 'column' } }}
+      PaperProps={{ sx: { marginTop: 5, display: 'flex', flexDirection: 'column', zIndex: 2000 } }}
       {...other}
     >
       <Box sx={{ p: 2, ml: 1 }}>

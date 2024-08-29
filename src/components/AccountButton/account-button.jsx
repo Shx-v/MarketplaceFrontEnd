@@ -11,7 +11,7 @@ export const AccountButton = () => {
 
   return (
     <>
-      <Tooltip title="Account">
+      <Tooltip title="Account" sx={{zIndex: 1000}}>
         <Stack
           sx={{ marginRight: '10px' }}
           direction={'row'}

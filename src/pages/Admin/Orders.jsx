@@ -14,6 +14,7 @@ import {
   Button,
   Box,
   Stack,
+  TablePagination,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -25,15 +26,26 @@ import { AuthContext } from 'src/contexts/auth/AuthContext';
 const Orders = () => {
   const { user, token } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const createSubscription = async (order) => {
-    console.log(order)
+    console.log(order);
     const apiData = {
       user: order.user,
       service: order.service,
       amount: order.amount,
     };
-    console.log(apiData)
+    console.log(apiData);
     try {
       const response = await axios.post('http://localhost:8080/api/v1/subscriptions', apiData, {
         headers: {
@@ -74,7 +86,7 @@ const Orders = () => {
   };
 
   const handleConfirmOrder = async (id, order) => {
-    console.log(order)
+    console.log(order);
     if (user) {
       try {
         await axios.put(
@@ -191,40 +203,51 @@ const Orders = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order, index) => (
-                <TableRow key={index}>
-                  <TableCell>{order.service.name}</TableCell>
-                  <TableCell>₹{order.amount}</TableCell>
-                  <TableCell>{order.paymentMethod}</TableCell>
-                  <TableCell>{order.status}</TableCell>
-                  <TableCell align="right">
-                    {order.status == 'Pending' && (
+              {orders
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((order, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{order.service.name}</TableCell>
+                    <TableCell>₹{order.amount}</TableCell>
+                    <TableCell>{order.paymentMethod}</TableCell>
+                    <TableCell>{order.status}</TableCell>
+                    <TableCell align="right">
+                      {order.status == 'Pending' && (
+                        <IconButton
+                          aria-label="cancel"
+                          onClick={() => handleCancelOrder(order._id)}
+                        >
+                          <CancelIcon color="error" />
+                        </IconButton>
+                      )}
+                      {order.status == 'Pending' && (
+                        <IconButton
+                          aria-label="confirm"
+                          onClick={() => handleConfirmOrder(order._id, order)}
+                        >
+                          <CheckIcon color="success" />
+                        </IconButton>
+                      )}
                       <IconButton
-                        aria-label="cancel"
-                        onClick={() => handleCancelOrder(order._id)}
+                        aria-label="delete"
+                        onClick={() => handleDeleteOrder(order._id)}
                       >
-                        <CancelIcon color="error" />
+                        <DeleteIcon />
                       </IconButton>
-                    )}
-                    {order.status == 'Pending' && (
-                      <IconButton
-                        aria-label="confirm"
-                        onClick={() => handleConfirmOrder(order._id, order)}
-                      >
-                        <CheckIcon color="success" />
-                      </IconButton>
-                    )}
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => handleDeleteOrder(order._id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
+          <TablePagination
+            component="div"
+            count={orders.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
         </TableContainer>
       )}
     </Container>

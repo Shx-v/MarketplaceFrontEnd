@@ -11,12 +11,21 @@ import {
   Stack,
   Box,
 } from '@mui/material';
-import EngineeringIcon from '@mui/icons-material/Engineering';
 import InfoIcon from '@mui/icons-material/Info';
-import axios from 'axios';
 
 const MySubscriptions = () => {
   const [subscriptions, setSubscriptions] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const fetchServices = async () => {
     try {
@@ -89,24 +98,35 @@ const MySubscriptions = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {subscriptions.map((subscription) => (
-                <TableRow key={subscription._id}>
-                  <TableCell>{subscription.service}</TableCell>
-                  <TableCell>₹{subscription.startDate}</TableCell>
-                  <TableCell>{subscription.endDate}</TableCell>
-                  <TableCell>{subscription.status}</TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => handleDelete(subscription.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {subscriptions
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((subscription) => (
+                  <TableRow key={subscription._id}>
+                    <TableCell>{subscription.service}</TableCell>
+                    <TableCell>₹{subscription.startDate}</TableCell>
+                    <TableCell>{subscription.endDate}</TableCell>
+                    <TableCell>{subscription.status}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => handleDelete(subscription.id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
+          <TablePagination
+            component="div"
+            count={subscriptions.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
         </TableContainer>
       )}
     </Container>
