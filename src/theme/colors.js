@@ -60,6 +60,51 @@ export const purple = withAlphas({
   contrastText: '#FFFFFF',
 });
 
+export const teal = withAlphas({
+  lightest: '#E0F2F1',
+  light: '#80CBC4',
+  main: '#008080',
+  dark: '#00695C',
+  darkest: '#004D40',
+  contrastText: '#FFFFFF',
+});
+
+export const turquoise = withAlphas({
+  lightest: '#E0FFFF',
+  light: '#AFEEEE',
+  main: '#40E0D0',
+  dark: '#00CED1',
+  darkest: '#008B8B',
+  contrastText: '#FFFFFF',
+});
+
+export const lavender = withAlphas({
+  lightest: '#FAF0E6',
+  light: '#E6E6FA',
+  main: '#B57EDC',
+  dark: '#7D4E9C',
+  darkest: '#4B306F',
+  contrastText: '#FFFFFF',
+});
+
+export const violet = withAlphas({
+  lightest: '#E6E6FA',
+  light: '#B19CD9',
+  main: '#8A2BE2',
+  dark: '#5B00A5',
+  darkest: '#2D005A',
+  contrastText: '#FFFFFF',
+});
+
+export const mint = withAlphas({
+  lightest: '#F5FFFA',
+  light: '#CFFFE5',
+  main: '#98FF98',
+  dark: '#66CDAA',
+  darkest: '#4682B4',
+  contrastText: '#FFFFFF',
+});
+
 export const success = withAlphas({
   lightest: '#F0FDF9',
   light: '#3FC79A',

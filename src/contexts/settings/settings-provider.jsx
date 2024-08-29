@@ -16,8 +16,6 @@ const restoreSettings = () => {
     }
   } catch (err) {
     console.error(err);
-    // If stored data is not a strigified JSON this will fail,
-    // that's why we catch the error
   }
 
   return value;
