@@ -102,6 +102,7 @@ export const AccountPopover = (props) => {
               transition: 'background-color 0.3s ease',
               color: 'inherit',
             }}
+            onClick={onClose}
           >
             <SvgIcon
               fontSize="small"
@@ -128,6 +129,7 @@ export const AccountPopover = (props) => {
               transition: 'background-color 0.3s ease',
               color: 'inherit',
             }}
+            onClick={onClose}
           >
             <SvgIcon
               fontSize="small"
@@ -154,6 +156,7 @@ export const AccountPopover = (props) => {
               transition: 'background-color 0.3s ease',
               color: 'inherit',
             }}
+            onClick={onClose}
           >
             <SvgIcon
               fontSize="small"
