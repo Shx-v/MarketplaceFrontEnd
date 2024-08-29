@@ -14,7 +14,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open = false, ...other } = props;
-  const { user, token, setUser, setToken, setIsLoggedIn } = useContext(AuthContext);
+  const { user, token, setUser, setToken, setIsLoggedIn, setIsAdmin } = useContext(AuthContext);
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
@@ -45,6 +45,7 @@ export const AccountPopover = (props) => {
         setUser(false);
         setToken(false);
         setIsLoggedIn(false);
+        setIsAdmin(false);
         navigate('/');
       }
     } catch (error) {

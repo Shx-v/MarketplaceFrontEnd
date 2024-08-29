@@ -1,22 +1,15 @@
 import { useCallback, useContext, useState } from 'react';
-import PropTypes from 'prop-types';
-import Menu01Icon from '@untitled-ui/icons-react/build/esm/Menu01';
 import { alpha } from '@mui/system/colorManipulator';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import SvgIcon from '@mui/material/SvgIcon';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { Logo } from 'src/components/logo';
 import { RouterLink } from 'src/components/router-link';
-import { version } from 'src/config';
 import { usePathname } from 'src/hooks/use-pathname';
 import { useWindowScroll } from 'src/hooks/use-window-scroll';
-import { paths } from 'src/paths';
 
 import { AuthContext } from 'src/contexts/auth/AuthContext';
 import { PagesPopover } from './pages-popover';

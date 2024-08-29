@@ -10,7 +10,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { setUser, setIsLoggedIn, setToken } = useContext(AuthContext);
+  const { setUser, setIsLoggedIn, setToken, setIsAdmin } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +29,7 @@ export default function LoginPage() {
           setToken(data?.data?.token);
           setUser(data?.data?.user._id);
           setIsLoggedIn(true);
+          setIsAdmin(data.data.user.role === 'admin');
           navigate('/');
         } else {
           setError(data?.message);

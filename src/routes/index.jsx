@@ -1,16 +1,12 @@
 import { lazy } from 'react';
 import { Outlet } from 'react-router-dom';
-
 import { Layout as MarketingLayout } from 'src/layouts/marketing';
-
 import { authRoutes } from './auth';
+import ProtectedRoute from '../components/ProtectedRoutes';
+import ProtectedAdminRoute from 'src/components/ProtectedAdminRoutes';
 
-const Error401Page = lazy(() => import('src/pages/401'));
 const Error404Page = lazy(() => import('src/pages/404'));
-const Error500Page = lazy(() => import('src/pages/500'));
-
 const Home = lazy(() => import('src/pages/Home/Home'));
-const AddProducts = lazy(() => import('src/pages/Products/AddProducts'));
 const AllProducts = lazy(() => import('src/pages/Products/AllProducts'));
 const ProductManagement = lazy(() => import('src/pages/Products/ProductManagement'));
 const CustomerManagement = lazy(() => import('src/pages/Products/CustomerManagement'));
@@ -101,15 +97,15 @@ export const routes = [
         children: [
           {
             path: 'services',
-            element: <MyProducts />,
+            element: <ProtectedRoute element={<MyProducts />} />,
           },
           {
             path: 'orders',
-            element: <MyOrders />,
+            element: <ProtectedRoute element={<MyOrders />} />,
           },
           {
             path: 'subscriptions',
-            element: <MySubscriptions />,
+            element: <ProtectedRoute element={<MySubscriptions />} />,
           },
         ],
       },
@@ -118,11 +114,11 @@ export const routes = [
         children: [
           {
             path: 'orders',
-            element: <Orders />,
+            element: <ProtectedAdminRoute element={<Orders />} />,
           },
           {
             path: 'subscriptions',
-            element: <Subscriptions />,
+            element: <ProtectedAdminRoute element={<Subscriptions />} />,
           },
         ],
       },
