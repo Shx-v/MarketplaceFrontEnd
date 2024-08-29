@@ -26,10 +26,12 @@ const MyServices = () => {
   const { user, token } = useContext(AuthContext);
   const [services, setServices] = useState([]);
   const [open, setOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
+    setSelectedService(null);
     handleGetServices();
   };
 
@@ -53,9 +55,9 @@ const MyServices = () => {
     handleGetServices();
   }, []);
 
-  const handleEdit = (id) => {
-    console.log(`Edit service with ID: ${id}`);
-    // Implement your edit functionality here
+  const handleEdit = (service) => {
+    setSelectedService(service);
+    setOpen(true);
   };
 
   const handleDelete = async (id) => {
@@ -147,7 +149,7 @@ const MyServices = () => {
                   <TableCell align="right">
                     <IconButton
                       aria-label="edit"
-                      onClick={() => handleEdit(service._id)}
+                      onClick={() => handleEdit(service)}
                     >
                       <EditIcon />
                     </IconButton>
@@ -165,10 +167,13 @@ const MyServices = () => {
         </TableContainer>
       )}
 
-      <CreateServiceModal
-        open={open}
-        onClose={handleClose}
-      />
+      {selectedService != null && (
+        <CreateServiceModal
+          open={open}
+          onClose={handleClose}
+          selectedService={selectedService}
+        />
+      )}
     </Container>
   );
 };

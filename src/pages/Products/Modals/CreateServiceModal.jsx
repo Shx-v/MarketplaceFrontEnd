@@ -18,8 +18,8 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { AuthContext } from 'src/contexts/auth/AuthContext';
 
-const CreateServiceModal = ({ open, onClose }) => {
-  const [name, setName] = useState('');
+const CreateServiceModal = ({ open, onClose, selectedService }) => {
+  const [name, setName] = useState(selectedService?.name ?? '');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
@@ -53,29 +53,6 @@ const CreateServiceModal = ({ open, onClose }) => {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e?.preventDefault();
-
-  //   const serviceData = {
-  //     name,
-  //     provider: currentUser,
-  //     description,
-  //     category,
-  //     price: parseFloat(price),
-  //     features: features.split(',').map((f) => f.trim()),
-  //   };
-
-  //   try {
-  //     const response = await axios.post('http://localhost:8080/api/v1/services', serviceData, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //   } catch (error) {
-  //     console.error('Error creating service:', error);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e?.preventDefault();
 
@@ -90,7 +67,7 @@ const CreateServiceModal = ({ open, onClose }) => {
 
     if (image) {
       const data = new FormData();
-      const filename = `http://localhost:8080/uploads/` +image.name;
+      const filename = `http://localhost:8080/uploads/` + image.name;
       data.append('image', image);
       serviceData.image = filename;
       try {
@@ -106,18 +83,37 @@ const CreateServiceModal = ({ open, onClose }) => {
       }
     }
 
-    try {
-      const res = await axios.post('http://localhost:8080/api/v1/services', serviceData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    } catch (error) {
-      console.error('Error creating service:', error);
+    if (selectedService) {
+      try {
+        const res = await axios.put(`http://localhost:8080/api/v1/services/${selectedService._id}`, serviceData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch (error) {
+        console.error('Error creating service:', error);
+      }
+    } else {
+      try {
+        const res = await axios.post('http://localhost:8080/api/v1/services', serviceData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch (error) {
+        console.error('Error creating service:', error);
+      }
     }
   };
 
   useEffect(() => {
+    if (selectedService) {
+      setName(selectedService.name || '');
+      setDescription(selectedService.description || '');
+      setCategory(selectedService.category || '');
+      setPrice(selectedService.price || '');
+      setFeatures(selectedService.features.join(',') || '');
+    }
     handleGetUser();
   }, []);
 
@@ -253,13 +249,13 @@ const CreateServiceModal = ({ open, onClose }) => {
         <Button
           onClick={() => {
             handleSubmit();
-            // onClose();
-            // setName('');
-            // setDescription('');
-            // setCategory('');
-            // setPrice('');
-            // setFeatures('');
-            // setImage(null);
+            onClose();
+            setName('');
+            setDescription('');
+            setCategory('');
+            setPrice('');
+            setFeatures('');
+            setImage(null);
           }}
           variant="contained"
           color="primary"
