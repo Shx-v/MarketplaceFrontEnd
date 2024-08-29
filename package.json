@@ -1,9 +1,7 @@
 {
-  "name": "@devias-kit-pro/vite",
+  "name": "@market-place/vite",
   "version": "6.4.2",
-  "author": "Devias",
-  "homepage": "https://devias.io",
-  "private": true,
+  "author": "Shxv",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,18 +10,6 @@
     "lint-fix": "eslint --fix ./src",
     "format:write": "prettier --write \"**/*.{js,jsx,ts,tsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,mdx}\" --cache"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "2.0.8",
@@ -41,6 +27,7 @@
     "@fullcalendar/react": "6.1.8",
     "@fullcalendar/timegrid": "6.1.8",
     "@fullcalendar/timeline": "6.1.8",
+    "@market-place/vite": "file:",
     "@mui/icons-material": "5.13.7",
     "@mui/lab": "5.0.0-alpha.135",
     "@mui/material": "5.13.7",
