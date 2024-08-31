@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { Container, Box, Typography, TextField, Button, Avatar } from '@mui/material';
+import { Container, Box, Typography, TextField, Button, Avatar, IconButton, InputAdornment } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router';
 
 const ChangePasswordPage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -15,6 +19,9 @@ const ChangePasswordPage = () => {
   const tokenParam = searchParams.get('token');
   const navigate = useNavigate();
 
+  const handleClickShowNewPassword = () => setShowNewPassword(!showNewPassword);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
@@ -22,6 +29,7 @@ const ChangePasswordPage = () => {
 
     if (!tokenParam) {
       setError('Error! No token.');
+      return;
     }
 
     if (newPassword !== confirmPassword) {
@@ -35,8 +43,6 @@ const ChangePasswordPage = () => {
         password: newPassword,
         token: tokenParam,
       });
-      console.log('first');
-      console.log(response);
 
       setSuccess('Your password has been changed successfully.');
       setNewPassword('');
@@ -50,10 +56,7 @@ const ChangePasswordPage = () => {
   };
 
   return (
-    <Container
-      component="main"
-      maxWidth="xs"
-    >
+    <Container component="main" maxWidth="xs">
       <Box
         sx={{
           marginTop: 8,
@@ -65,29 +68,34 @@ const ChangePasswordPage = () => {
         <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography
-          component="h1"
-          variant="h5"
-        >
+        <Typography component="h1" variant="h5">
           Change Password
         </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{ mt: 1 }}
-        >
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
             fullWidth
             name="newPassword"
             label="New Password"
-            type="password"
+            type={showNewPassword ? 'text' : 'password'}
             id="newPassword"
             autoComplete="new-password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle new password visibility"
+                    onClick={handleClickShowNewPassword}
+                    edge="end"
+                  >
+                    {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             margin="normal"
@@ -95,27 +103,32 @@ const ChangePasswordPage = () => {
             fullWidth
             name="confirmPassword"
             label="Confirm Password"
-            type="password"
+            type={showConfirmPassword ? 'text' : 'password'}
             id="confirmPassword"
             autoComplete="new-password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle confirm password visibility"
+                    onClick={handleClickShowConfirmPassword}
+                    edge="end"
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           {error && (
-            <Typography
-              color="error"
-              variant="body2"
-              align="center"
-            >
+            <Typography color="error" variant="body2" align="center">
               {error}
             </Typography>
           )}
           {success && (
-            <Typography
-              color="success"
-              variant="body2"
-              align="center"
-            >
+            <Typography color="success" variant="body2" align="center">
               {success}
             </Typography>
           )}

@@ -1,5 +1,5 @@
 // src/pages/MyServices/MyServices.js
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Container,
   Typography,
@@ -10,10 +10,22 @@ import {
   IconButton,
   Stack,
   Box,
+  TableContainer,
+  Table,
+  TableHead,
+  TableCell,
+  TableBody,
+  TablePagination,
+  Paper,
+  TableRow,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { AuthContext } from 'src/contexts/auth/AuthContext';
+import axios from 'axios';
 
 const MySubscriptions = () => {
+  const { user, token } = useContext(AuthContext);
   const [subscriptions, setSubscriptions] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -27,15 +39,29 @@ const MySubscriptions = () => {
     setPage(0);
   };
 
-  const fetchServices = async () => {
-    try {
-    } catch (error) {
-      console.error('Error fetching services:', error);
+  const handleGetSubscriptions = async () => {
+    if (user) {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/subscriptions/sub/${user}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = response.data.EncryptedResponse;
+        setSubscriptions(data.data.subscriptions);
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      }
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB');
+  };
+
   useEffect(() => {
-    fetchServices();
+    handleGetSubscriptions();
   }, []);
 
   return (
@@ -93,8 +119,7 @@ const MySubscriptions = () => {
                 <TableCell>Service</TableCell>
                 <TableCell>Start</TableCell>
                 <TableCell>End</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell align="right">Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -102,18 +127,10 @@ const MySubscriptions = () => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((subscription) => (
                   <TableRow key={subscription._id}>
-                    <TableCell>{subscription.service}</TableCell>
-                    <TableCell>₹{subscription.startDate}</TableCell>
-                    <TableCell>{subscription.endDate}</TableCell>
-                    <TableCell>{subscription.status}</TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => handleDelete(subscription.id)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
+                    <TableCell>{subscription.service.name}</TableCell>
+                    <TableCell>{formatDate(subscription.startDate)}</TableCell>
+                    <TableCell>{formatDate(subscription.endDate)}</TableCell>
+                    <TableCell align="right">{subscription.status}</TableCell>
                   </TableRow>
                 ))}
             </TableBody>

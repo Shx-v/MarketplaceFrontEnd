@@ -115,7 +115,7 @@ const CreateServiceModal = ({ open, onClose, selectedService }) => {
       setFeatures(selectedService.features.join(',') || '');
     }
     handleGetUser();
-  }, []);
+  }, [selectedService]);
 
   return (
     <Dialog

@@ -45,12 +45,25 @@ const ProductCard = ({ service }) => {
         >
           {service.name}
         </Typography>
+        <Rating
+          value={service.averageRating}
+          precision={0.5}
+          readOnly
+          sx={{ mt: 1 }}
+        />
         <Typography
           variant="subtitle1"
           color="text.secondary"
           sx={{ mt: 1 }}
         >
-          Features: {service.features.join(', ')}
+          Price: ₹{service.price}
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          color="text.secondary"
+          sx={{ mt: 1 }}
+        >
+          Category: {service.category}
         </Typography>
         <Typography
           variant="subtitle1"
@@ -64,21 +77,8 @@ const ProductCard = ({ service }) => {
           color="text.secondary"
           sx={{ mt: 1 }}
         >
-          Price: {service.price}
+          Features: {service.features.join(', ')}
         </Typography>
-        <Typography
-          variant="subtitle1"
-          color="text.secondary"
-          sx={{ mt: 1 }}
-        >
-          Category: {service.category}
-        </Typography>
-        <Rating
-          value={service.averageRating}
-          precision={0.5}
-          readOnly
-          sx={{ mt: 1 }}
-        />
       </CardContent>
     </Card>
   );

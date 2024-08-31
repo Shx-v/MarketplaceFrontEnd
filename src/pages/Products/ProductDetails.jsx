@@ -8,8 +8,9 @@ import SubscriptionOrderModal from './Modals/SubscriptionOrderModal';
 const ServiceDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { token, isLoggedIn } = useContext(AuthContext);
+  const { user, token, isLoggedIn } = useContext(AuthContext);
   const [currentUser, setCurrentUser] = useState(null);
+  const [ provider, setProvider] = useState(null);
   const [service, setService] = useState(null);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
@@ -21,6 +22,20 @@ const ServiceDetail = () => {
   const handleGetUser = async (id) => {
     try {
       const response = await axios.get(`http://localhost:8080/api/v1/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = response.data.EncryptedResponse;
+      setProvider(data.data.user);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+  };
+  
+  const handleGetCurrentUser = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/v1/users/${user}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -72,6 +87,7 @@ const ServiceDetail = () => {
 
   useEffect(() => {
     handleGetService();
+    handleGetCurrentUser();
   }, []);
 
   useEffect(() => {
@@ -115,7 +131,7 @@ const ServiceDetail = () => {
             color="textSecondary"
             gutterBottom
           >
-            {service?.category} by {currentUser?.firstName}
+            {service?.category} by {provider?.firstName}
           </Typography>
           <Rating
             value={service?.averageRating ?? 0}
@@ -126,7 +142,7 @@ const ServiceDetail = () => {
             variant="h5"
             sx={{ mt: 2 }}
           >
-            {service?.price}
+            ₹{service?.price}
           </Typography>
           <Typography
             variant="body1"
