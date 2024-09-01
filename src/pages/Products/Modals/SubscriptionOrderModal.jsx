@@ -20,7 +20,7 @@ const SubscriptionOrderModal = ({ open, handleClose, service }) => {
 
   const handleGetUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/users/${user}`, {
+      const response = await axios.get(`https://marketplacebackend-5jv3.onrender.com/api/v1/users/${user}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -44,7 +44,7 @@ const SubscriptionOrderModal = ({ open, handleClose, service }) => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/orders', orderData, {
+      const response = await axios.post('https://marketplacebackend-5jv3.onrender.com/api/v1/orders', orderData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

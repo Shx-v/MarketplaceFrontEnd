@@ -41,7 +41,7 @@ const CreateServiceModal = ({ open, onClose, selectedService }) => {
 
   const handleGetUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/users/${user}`, {
+      const response = await axios.get(`https://marketplacebackend-5jv3.onrender.com/api/v1/users/${user}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -67,11 +67,11 @@ const CreateServiceModal = ({ open, onClose, selectedService }) => {
 
     if (image) {
       const data = new FormData();
-      const filename = `http://localhost:8080/uploads/` + image.name;
+      const filename = `https://marketplacebackend-5jv3.onrender.com/uploads/` + image.name;
       data.append('image', image);
       serviceData.image = filename;
       try {
-        const imgUpload = await axios.post(`http://localhost:8080/api/v1/upload`, data, {
+        const imgUpload = await axios.post(`https://marketplacebackend-5jv3.onrender.com/api/v1/upload`, data, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -85,7 +85,7 @@ const CreateServiceModal = ({ open, onClose, selectedService }) => {
 
     if (selectedService) {
       try {
-        const res = await axios.put(`http://localhost:8080/api/v1/services/${selectedService._id}`, serviceData, {
+        const res = await axios.put(`https://marketplacebackend-5jv3.onrender.com/api/v1/services/${selectedService._id}`, serviceData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -95,7 +95,7 @@ const CreateServiceModal = ({ open, onClose, selectedService }) => {
       }
     } else {
       try {
-        const res = await axios.post('http://localhost:8080/api/v1/services', serviceData, {
+        const res = await axios.post('https://marketplacebackend-5jv3.onrender.com/api/v1/services', serviceData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

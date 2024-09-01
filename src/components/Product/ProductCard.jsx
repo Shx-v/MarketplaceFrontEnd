@@ -11,7 +11,7 @@ const ProductCard = ({ service }) => {
 
   const handleGetUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/users/${service.provider}`, {
+      const response = await axios.get(`https://marketplacebackend-5jv3.onrender.com/api/v1/users/${service.provider}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

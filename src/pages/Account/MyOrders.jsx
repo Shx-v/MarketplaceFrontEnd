@@ -39,7 +39,7 @@ const MyServices = () => {
   const handleGetOrders = async () => {
     if (user) {
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/orders/buyer/${user}`, {
+        const response = await axios.get(`https://marketplacebackend-5jv3.onrender.com/api/v1/orders/buyer/${user}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -55,7 +55,7 @@ const MyServices = () => {
   const handleDeleteOrder = async (id) => {
     if (user) {
       try {
-        const response = await axios.delete(`http://localhost:8080/api/v1/orders/${id}`, {
+        const response = await axios.delete(`https://marketplacebackend-5jv3.onrender.com/api/v1/orders/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

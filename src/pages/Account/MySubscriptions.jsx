@@ -42,7 +42,7 @@ const MySubscriptions = () => {
   const handleGetSubscriptions = async () => {
     if (user) {
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/subscriptions/sub/${user}`, {
+        const response = await axios.get(`https://marketplacebackend-5jv3.onrender.com/api/v1/subscriptions/sub/${user}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

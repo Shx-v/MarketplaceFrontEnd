@@ -47,7 +47,7 @@ const Orders = () => {
     };
     console.log(apiData);
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/subscriptions', apiData, {
+      const response = await axios.post('https://marketplacebackend-5jv3.onrender.com/api/v1/subscriptions', apiData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ const Orders = () => {
     if (user) {
       try {
         await axios.put(
-          `http://localhost:8080/api/v1/orders/${id}`,
+          `https://marketplacebackend-5jv3.onrender.com/api/v1/orders/${id}`,
           { status: 'cancelled' },
           {
             headers: {
@@ -90,7 +90,7 @@ const Orders = () => {
     if (user) {
       try {
         await axios.put(
-          `http://localhost:8080/api/v1/orders/${id}`,
+          `https://marketplacebackend-5jv3.onrender.com/api/v1/orders/${id}`,
           { status: 'completed' },
           {
             headers: {
@@ -111,7 +111,7 @@ const Orders = () => {
   const handleGetOrders = async () => {
     if (user) {
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/orders`, {
+        const response = await axios.get(`https://marketplacebackend-5jv3.onrender.com/api/v1/orders`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -127,7 +127,7 @@ const Orders = () => {
   const handleDeleteOrder = async (id) => {
     if (user) {
       try {
-        const response = await axios.delete(`http://localhost:8080/api/v1/orders/${id}`, {
+        const response = await axios.delete(`https://marketplacebackend-5jv3.onrender.com/api/v1/orders/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -20,7 +20,7 @@ export const AccountPopover = (props) => {
 
   const handleGetUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/users/${user}`, {
+      const response = await axios.get(`https://marketplacebackend-5jv3.onrender.com/api/v1/users/${user}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -34,7 +34,7 @@ export const AccountPopover = (props) => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/auth/logout`, {
+      const response = await axios.get(`https://marketplacebackend-5jv3.onrender.com/api/v1/auth/logout`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

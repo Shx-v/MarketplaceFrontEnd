@@ -32,7 +32,7 @@ export default function RegisterPage() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/auth/register', {
+      const response = await axios.post('https://marketplacebackend-5jv3.onrender.com/api/v1/auth/register', {
         firstName,
         lastName,
         email,

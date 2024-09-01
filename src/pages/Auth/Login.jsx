@@ -23,7 +23,7 @@ export default function LoginPage() {
 
     if (email !== '') {
       try {
-        const response = await axios.post('http://localhost:8080/api/v1/auth/login', {
+        const response = await axios.post('https://marketplacebackend-5jv3.onrender.com/api/v1/auth/login', {
           email,
           password,
         });

@@ -21,7 +21,7 @@ const ServiceDetail = () => {
 
   const handleGetUser = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/users/${id}`, {
+      const response = await axios.get(`https://marketplacebackend-5jv3.onrender.com/api/v1/users/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -35,7 +35,7 @@ const ServiceDetail = () => {
   
   const handleGetCurrentUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/users/${user}`, {
+      const response = await axios.get(`https://marketplacebackend-5jv3.onrender.com/api/v1/users/${user}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -49,7 +49,7 @@ const ServiceDetail = () => {
 
   const handleGetService = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/services/${id}`, {
+      const response = await axios.get(`https://marketplacebackend-5jv3.onrender.com/api/v1/services/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -66,7 +66,7 @@ const ServiceDetail = () => {
     if (isLoggedIn) {
       try {
         await axios.post(
-          `http://localhost:8080/api/v1/services/review/${id}`,
+          `https://marketplacebackend-5jv3.onrender.com/api/v1/services/review/${id}`,
           { user: currentUser, rating, comment },
           {
             headers: {

@@ -39,7 +39,7 @@ const ChangePasswordPage = () => {
 
     setLoading(true);
     try {
-      const response = await axios.put('http://localhost:8080/api/v1/auth/change-password', {
+      const response = await axios.put('https://marketplacebackend-5jv3.onrender.com/api/v1/auth/change-password', {
         password: newPassword,
         token: tokenParam,
       });
